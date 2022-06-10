@@ -1,45 +1,65 @@
-import React from 'react'
-import { Box, Center, Heading, Image, Stack, Text, useColorModeValue } from "@chakra-ui/react"
-import FilterComponents from '../Components/FilterComponents'
-import Product from "../Pages/Product"
-import { useSelector, useDispatch } from "react-redux"
-import {fetchData} from "../Redux/products/action"
-import { useEffect } from 'react'
+import React from "react";
+import {
+  Box,
+  Center,
+  Flex,
+  Heading,
+  Image,
+  Stack,
+  Text,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import FilterComponents from "../Components/FilterComponents";
+import Product from "../Pages/Product";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchData } from "../Redux/products/action";
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
-const IMAGE =
-  "https://images.unsplash.com/photo-1518051870910-a46e30d9db16?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1350&q=80";
 
 
 const Products = () => {
-
   const products = useSelector((store) => store.ecommerceData.products);
-  
   const dispatch = useDispatch()
+  const [searchParams] = useSearchParams()
   
 
   useEffect(() => {
     if (products?.length === 0) {
-      dispatch(fetchData());
+      let params = {
+        category:searchParams.getAll('category')
+      }
+      dispatch(fetchData(params));
     }
-  },[dispatch , products?.length])
-
+  }, [dispatch, products?.length , searchParams]);
 
   return (
     <Box>
-      <Stack display={{md:"flex"}} flexDirection={{ md:"row"}}>
+      <Stack display={{ md: "flex" }} flexDirection={{ md: "row" }}>
         <Box>
           <FilterComponents />
         </Box>
         <Box>
-          {/* <Product /> */}
-          <ProductSimple />
+          <Heading as="h3">Products</Heading>
+          <Flex flexWrap='wrap' justifyContent="space-around" >
+            {products.map((product) => {
+              return (
+                <ProductSimple
+                  key={product.id}
+                  image={product.image}
+                  title={product.title}
+                  price={product.price}
+                />
+              );
+            })}
+          </Flex>
         </Box>
       </Stack>
     </Box>
   );
-}
+};
 
-function ProductSimple() {
+function ProductSimple({image , title , price}) {
   return (
     <Center py={12}>
       <Box
@@ -66,7 +86,7 @@ function ProductSimple() {
             pos: "absolute",
             top: 5,
             left: 0,
-            backgroundImage: `url(${IMAGE})`,
+            backgroundImage: `url(${image})`,
             filter: "blur(15px)",
             zIndex: -1,
           }}
@@ -80,23 +100,20 @@ function ProductSimple() {
             rounded={"lg"}
             height={230}
             width={282}
-            objectFit={"cover"}
-            src={IMAGE}
+            objectFit={"contain"}
+            src={image}
           />
         </Box>
         <Stack pt={10} align={"center"}>
-          <Text color={"gray.500"} fontSize={"sm"} textTransform={"uppercase"}>
-            Brand
-          </Text>
           <Heading fontSize={"2xl"} fontFamily={"body"} fontWeight={500}>
-            Nice Chair, pink
+            {title}
           </Heading>
           <Stack direction={"row"} align={"center"}>
             <Text fontWeight={800} fontSize={"xl"}>
-              $57
+              ₹{price}
             </Text>
             <Text textDecoration={"line-through"} color={"gray.600"}>
-              $199
+              ₹ {Math.ceil(Math.random() * 10) * 50}
             </Text>
           </Stack>
         </Stack>
@@ -105,4 +122,4 @@ function ProductSimple() {
   );
 }
 
-export default Products
+export default Products;

@@ -28,7 +28,11 @@ const fetchData = (payload) => {
     return (dispatch) => {
         dispatch(fetchDataRequest());
 
-        Axios.get('/products')
+        Axios.get('/products', {
+            params: {
+                ...payload,
+            },
+        })
           .then(r => dispatch(fetchDataSuccess(r.data)))
           .catch(e => dispatch(fetchDataFailure(e.data)));
     }

@@ -1,22 +1,44 @@
-import React from 'react'
-import {Box , Button,Checkbox, CheckboxGroup, VStack, Text, Menu, MenuButton, MenuList, MenuOptionGroup, MenuItemOption, MenuDivider} from "@chakra-ui/react"
-import { useState } from 'react';
-import {useSearchParams} from "react-router-dom"
-import { useEffect } from 'react';
+import React from "react";
+import {
+  Box,
+  Button,
+  Checkbox,
+  CheckboxGroup,
+  VStack,
+  Text,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuOptionGroup,
+  MenuItemOption,
+  MenuDivider,
+} from "@chakra-ui/react";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchData } from "../Redux/products/action";
 
 const FilterComponents = () => {
-  const [searchParam , setSearchParam] = useSearchParams()
-  const [categoryValues , setCategoryValue] = useState( searchParam.getAll("category") || []);
+  const dispatch = useDispatch();
+  const [searchParam, setSearchParam] = useSearchParams();
+  const [categoryValues, setCategoryValue] = useState(
+    searchParam.getAll("category") || []
+  );
 
-  const categoryHandler = (values) => {  
-    setCategoryValue(values)
-  }
+  const categoryHandler = (values) => {
+    setCategoryValue(values);
+  };
 
   useEffect(() => {
     if (categoryValues) {
-      setSearchParam({category:categoryValues} , {replace:true})
+      setSearchParam({ category: categoryValues });
     }
-  },[categoryValues , setSearchParam])
+    let params = {
+      category: searchParam.getAll("category"),
+    };
+    dispatch(fetchData(params));
+  }, [categoryValues, setSearchParam, dispatch, searchParam]);
 
   return (
     <Box>
@@ -38,7 +60,7 @@ const FilterComponents = () => {
           </VStack>
         </CheckboxGroup>
       </Box>
-      <Box display={{base:"block" , md:"none"}} p="0rem 2rem">
+      <Box display={{ base: "block", md: "none" }} p="0rem 2rem">
         <Menu closeOnSelect={false}>
           <MenuButton as={Button} colorScheme="blue">
             MenuItem
@@ -59,6 +81,6 @@ const FilterComponents = () => {
       </Box>
     </Box>
   );
-}
+};
 
-export default FilterComponents
+export default FilterComponents;
