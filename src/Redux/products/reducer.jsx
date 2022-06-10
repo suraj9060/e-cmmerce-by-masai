@@ -2,7 +2,7 @@ import * as types from './actionType'
 
 const initialState = {
     products: [],
-    error: "",
+    error: '',
     loading: false
 }
 
@@ -10,19 +10,22 @@ const reducer = (state = initialState, action) => {
     const { type, payload } = action
     switch (type)
     {
-        case types.FETCH_DATA_REQUEST: return {
+        case types.FETCH_DATA_REQUEST:
+            return {
             ...state,
-            error: "",
+            error: '',
             loading: true
             
         }
-        case types.FETCH_DATA_SUCCESS: return {
+        case types.FETCH_DATA_SUCCESS:
+            return {
             ...state,
             products: payload,
-            error: "",
+            error: '',
             loading: false
         }
-        case types.FETCH_DATA_FAILURE: return {
+        case types.FETCH_DATA_FAILURE:
+            return {
             ...state,
             error: payload,
             loading:false
