@@ -16,22 +16,19 @@ import { fetchData } from "../Redux/products/action";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
-
-
 const Products = () => {
   const products = useSelector((store) => store.ecommerceData.products);
-  const dispatch = useDispatch()
-  const [searchParams] = useSearchParams()
-  
+  const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     if (products?.length === 0) {
       let params = {
-        category:searchParams.getAll('category')
-      }
+        category: searchParams.getAll("category"),
+      };
       dispatch(fetchData(params));
     }
-  }, [dispatch, products?.length , searchParams]);
+  }, [dispatch, products?.length, searchParams]);
 
   return (
     <Box>
@@ -59,7 +56,7 @@ const Products = () => {
   );
 };
 
-function ProductSimple({image , title , price}) {
+function ProductSimple({ image, title, price }) {
   return (
     <Center py={12}>
       <Box

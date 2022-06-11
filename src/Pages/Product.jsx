@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import {
   Box,
-
   Container,
   Stack,
   Text,
@@ -14,26 +13,32 @@ import {
   StackDivider,
   useColorModeValue,
 
-  List,
-  ListItem,
 } from "@chakra-ui/react";
 import { MdLocalShipping } from "react-icons/md";
 
+import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 
 
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-
-
+import { useDispatch, useSelector } from "react-redux";
+import { getSingleData, addToCart } from "../Redux/products/action";
 
 export default function Product() {
-  const dispatch = useDispatch()
-  const params = useParams()
-  console.log(params)
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const currentProduct = useSelector(
+    (store) => store.ecommerceData.currentProduct
+  );
 
   useEffect(() => {
-    
-  })
+    if (id) {
+      dispatch(getSingleData(id));
+    }
+  }, [dispatch, id]);
+
+  const addToCartHandle = () => {
+    currentProduct && dispatch(addToCart(currentProduct));
+  }
   return (
     <Container maxW={"7xl"}>
       <SimpleGrid
@@ -45,10 +50,8 @@ export default function Product() {
           <Image
             rounded={"md"}
             alt={"product image"}
-            src={
-              "https://images.unsplash.com/photo-1596516109370-29001ec8ec36?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyODE1MDl8MHwxfGFsbHx8fHx8fHx8fDE2Mzg5MzY2MzE&ixlib=rb-1.2.1&q=80&w=1080"
-            }
-            fit={"cover"}
+            src={currentProduct.image}
+            fit={"contain"}
             align={"center"}
             w={"100%"}
             h={{ base: "100%", sm: "400px", lg: "500px" }}
@@ -61,14 +64,14 @@ export default function Product() {
               fontWeight={600}
               fontSize={{ base: "2xl", sm: "4xl", lg: "5xl" }}
             >
-              Automatic Watch
+              {currentProduct.title}
             </Heading>
             <Text
               color={useColorModeValue("gray.900", "gray.400")}
               fontWeight={300}
               fontSize={"2xl"}
             >
-              $350.00 USD
+              ₹{currentProduct.price}
             </Text>
           </Box>
 
@@ -87,8 +90,7 @@ export default function Product() {
                 fontSize={"2xl"}
                 fontWeight={"300"}
               >
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                diam nonumy eirmod tempor invidunt ut labore
+                {currentProduct.description}
               </Text>
               <Text fontSize={"lg"}>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad
@@ -97,87 +99,12 @@ export default function Product() {
                 reprehenderit velit? Natus, totam.
               </Text>
             </VStack>
-            <Box>
-              <Text
-                fontSize={{ base: "16px", lg: "18px" }}
-                color={useColorModeValue("yellow.500", "yellow.300")}
-                fontWeight={"500"}
-                textTransform={"uppercase"}
-                mb={"4"}
-              >
-                Features
-              </Text>
-
-              <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
-                <List spacing={2}>
-                  <ListItem>Chronograph</ListItem>
-                  <ListItem>Master Chronometer Certified</ListItem>{" "}
-                  <ListItem>Tachymeter</ListItem>
-                </List>
-                <List spacing={2}>
-                  <ListItem>Anti‑magnetic</ListItem>
-                  <ListItem>Chronometer</ListItem>
-                  <ListItem>Small seconds</ListItem>
-                </List>
-              </SimpleGrid>
-            </Box>
-            <Box>
-              <Text
-                fontSize={{ base: "16px", lg: "18px" }}
-                color={useColorModeValue("yellow.500", "yellow.300")}
-                fontWeight={"500"}
-                textTransform={"uppercase"}
-                mb={"4"}
-              >
-                Product Details
-              </Text>
-
-              <List spacing={2}>
-                <ListItem>
-                  <Text as={"span"} fontWeight={"bold"}>
-                    Between lugs:
-                  </Text>{" "}
-                  20 mm
-                </ListItem>
-                <ListItem>
-                  <Text as={"span"} fontWeight={"bold"}>
-                    Bracelet:
-                  </Text>{" "}
-                  leather strap
-                </ListItem>
-                <ListItem>
-                  <Text as={"span"} fontWeight={"bold"}>
-                    Case:
-                  </Text>{" "}
-                  Steel
-                </ListItem>
-                <ListItem>
-                  <Text as={"span"} fontWeight={"bold"}>
-                    Case diameter:
-                  </Text>{" "}
-                  42 mm
-                </ListItem>
-                <ListItem>
-                  <Text as={"span"} fontWeight={"bold"}>
-                    Dial color:
-                  </Text>{" "}
-                  Black
-                </ListItem>
-                <ListItem>
-                  <Text as={"span"} fontWeight={"bold"}>
-                    Crystal:
-                  </Text>{" "}
-                  Domed, scratch‑resistant sapphire crystal with anti‑reflective
-                  treatment inside
-                </ListItem>
-                <ListItem>
-                  <Text as={"span"} fontWeight={"bold"}>
-                    Water resistance:
-                  </Text>{" "}
-                  5 bar (50 metres / 167 feet){" "}
-                </ListItem>
-              </List>
-            </Box>
+            <Flex>
+              {/* Rating */}
+              {Rating({rating:Number(currentProduct?.rating?.rate)})}
+            
+              
+           </Flex>
           </Stack>
 
           <Button
@@ -193,6 +120,8 @@ export default function Product() {
               transform: "translateY(2px)",
               boxShadow: "lg",
             }}
+
+            onClick={addToCartHandle}
           >
             Add to cart
           </Button>
@@ -204,5 +133,33 @@ export default function Product() {
         </Stack>
       </SimpleGrid>
     </Container>
+  );
+}
+
+
+
+function Rating({ rating }) {
+  return (
+    <Box display={'flex'}>
+      {Array(5)
+        .fill("")
+        .map((_, i) => {
+          const roundedRating = Math.round(rating * 2) / 2;
+          if (roundedRating - i >= 1) {
+            return (
+              <BsStarFill
+                key={i}
+               
+                color={i < rating ? "red.500" : "yellow.300"}
+              />
+            );
+          }
+          if (roundedRating - i === 0.5) {
+            return <BsStarHalf key={i}  />;
+          }
+          return <BsStar key={i}  />;
+        })}
+     
+    </Box>
   );
 }

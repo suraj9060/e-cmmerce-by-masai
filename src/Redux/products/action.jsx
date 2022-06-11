@@ -45,31 +45,62 @@ const fetchData = (payload) => {
 const getSingleDataRequest = (payload) => {
     return {
         type: types.GET_SINGLE_PRODUCT_REQUEST,
-        payload
+        payload,
     }
 }
 
 const getSingleDataSuccess = (payload) => {
     return {
         type: types.GET_SINGLE_PRODUCT_SUCCESS,
-        payload
+        payload,
     }
 }
 
 const getSingleDataFailure = (payload) => {
     return {
         type: types.GET_SINGLE_PRODUCT_FAILURE,
+        payload,
+    }
+}
+
+const getSingleData = (id) =>(dispatch)=> {
+   
+        dispatch(getSingleDataRequest())
+
+        Axios.get(`/products/${id}`)
+            .then((r )=> dispatch(getSingleDataSuccess(r.data)))
+            .catch((e) => dispatch(getSingleDataFailure(e.data)))
+    
+}
+
+
+const addToCartRequest = (payload) => {
+    return {
+        type: types.ADD_TO_CART_REQUEST,
         payload
     }
 }
 
-const getSingleData = (id) => {
-    return (dispatch)=>{
-        dispatch(getSingleDataRequest())
-
-        Axios.get(`product/${id}`).then(r=> dispatch(getSingleDataSuccess(r.data))).catch(err => dispatch(getSingleDataFailure(err.data)))
+const addToCartSuccess = (payload) => {
+    return {
+        type: types.ADD_TO_CART_SUCCESS,
+        payload
     }
 }
 
+const addToCartFailure = (payload) => {
+    return {
+        type: types.ADD_TO_CART_FAILURE,
+        payload
+    }
+}
 
-export { fetchData , getSingleData};
+const addToCart = (product) => (dispatch) => {
+    
+    dispatch(addToCartRequest())
+
+    Axios.post("./cart" , product).then(r=> dispatch(addToCartSuccess(r.data))).catch(e => dispatch(e.data))
+}
+
+
+export { fetchData , getSingleData , addToCart};
