@@ -38,4 +38,38 @@ const fetchData = (payload) => {
     }
 }
 
-export { fetchData };
+
+
+
+
+const getSingleDataRequest = (payload) => {
+    return {
+        type: types.GET_SINGLE_PRODUCT_REQUEST,
+        payload
+    }
+}
+
+const getSingleDataSuccess = (payload) => {
+    return {
+        type: types.GET_SINGLE_PRODUCT_SUCCESS,
+        payload
+    }
+}
+
+const getSingleDataFailure = (payload) => {
+    return {
+        type: types.GET_SINGLE_PRODUCT_FAILURE,
+        payload
+    }
+}
+
+const getSingleData = (id) => {
+    return (dispatch)=>{
+        dispatch(getSingleDataRequest())
+
+        Axios.get(`product/${id}`).then(r=> dispatch(getSingleDataSuccess(r.data))).catch(err => dispatch(getSingleDataFailure(err.data)))
+    }
+}
+
+
+export { fetchData , getSingleData};

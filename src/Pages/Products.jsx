@@ -36,12 +36,12 @@ const Products = () => {
   return (
     <Box>
       <Stack display={{ md: "flex" }} flexDirection={{ md: "row" }}>
-        <Box>
+        <Box minWidth={"15rem"}>
           <FilterComponents />
         </Box>
         <Box>
           <Heading as="h3">Products</Heading>
-          <Flex flexWrap='wrap' justifyContent="space-around" >
+          <Flex flexWrap="wrap" justifyContent="space-around">
             {products.map((product) => {
               return (
                 <ProductSimple
