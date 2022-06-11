@@ -9,7 +9,10 @@ import {
   useColorModeValue,
   useBreakpointValue,
   useDisclosure,
+  Icon,
 } from "@chakra-ui/react";
+
+import {BsCart3} from "react-icons/bs"
 
 import {
   HamburgerIcon,
@@ -65,6 +68,7 @@ const Navbar = () => {
           direction={"row"}
           spacing={6}
         >
+          <Icon as={BsCart3} boxSize='2rem' />
          <Profile />
          
         </Stack>
