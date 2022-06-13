@@ -20,6 +20,7 @@ import {
 
 } from "@chakra-ui/icons";
 import Profile from './Profile';
+import CartCounter from './CartCounter';
 
 const Navbar = () => {
      const { isOpen, onToggle } = useDisclosure();
@@ -58,8 +59,6 @@ const Navbar = () => {
           >
             Logo
           </Text>
-
-          
         </Flex>
 
         <Stack
@@ -68,13 +67,13 @@ const Navbar = () => {
           direction={"row"}
           spacing={6}
         >
-          <Icon as={BsCart3} boxSize='2rem' />
-         <Profile />
-         
+          <Box position='relative' padding='0 0.rem 0 0'>
+            <CartCounter />
+            <Icon as={BsCart3} boxSize="2rem" />
+          </Box>
+          <Profile />
         </Stack>
       </Flex>
-
-      
     </Box>
   );
 }

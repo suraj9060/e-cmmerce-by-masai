@@ -103,4 +103,28 @@ const addToCart = (product) => (dispatch) => {
 }
 
 
+const fetchCartRequest = (payload) => {
+    return {
+        type: types.FETCH_CART_REQUEST,
+        payload
+    };
+}
+
+const fetchCartSucess = (payload) => {
+    return {
+        type: types.FETCH_CART_SUCCESS,
+        payload
+    };
+}
+
+const fetchCartFailure = (payload) => {
+  return {
+    type: types.FETCH_CART_FAILURE,
+    payload,
+  };
+};
+
+
+
+
 export { fetchData , getSingleData , addToCart};
