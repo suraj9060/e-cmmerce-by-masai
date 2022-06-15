@@ -99,7 +99,9 @@ const addToCart = (product) => (dispatch) => {
     
     dispatch(addToCartRequest())
 
-    Axios.post("./cart" , product).then(r=> dispatch(addToCartSuccess(r.data))).catch(e => dispatch(e.data))
+    Axios.post("./cart", product)
+        .then(r => dispatch(addToCartSuccess(r.data)))
+        .catch(e => dispatch(addToCartFailure(e.data)))
 }
 
 
@@ -127,10 +129,44 @@ const fetchCartFailure = (payload) => {
 
 const fetchCart = (payload) => (dispatch) => {
     dispatch(fetchCartRequest())
-    Axios.get("/cart").then((r) => dispatch(fetchCartSucess(r.data))).catch(e=>dispatch(getSingleDataFailure(e.data)));
-
+    Axios.get("/cart")
+        .then((r) => dispatch(fetchCartSucess(r.data)))
+        .catch(e => dispatch(fetchCartFailure(e.data)));
 
 }
 
+const removeProductCartRequest = (payload) => {
+    return {
+      type: types.REMOVE_PRODUCT_CART_REQUEST,
+      payload,
+    };
+   
+}
 
-export { fetchData , getSingleData , addToCart};
+const removeProductCartSuccess = (payload) => {
+    return {
+        type: types.REMOVE_PRODUCT_CART_SUCCESS,
+        payload
+    }
+}
+
+const removeProductCartFailure = (payload) => {
+    return {
+        type: types.REMOVE_PRODUCT_CART_FAILURE,
+        payload
+    }
+}
+
+const removeProductCart = (id) => (dispatch) => {
+    dispatch(removeProductCartRequest())
+  
+    Axios.delete(`/cart/${id}`)
+        .then((r) => {
+            console.log(r)
+            dispatch(removeProductCartSuccess(r.data))
+        }).then(() => dispatch(fetchCart()))
+        .catch(e => dispatch(removeProductCartFailure(e.data)))
+
+}
+
+export { fetchData , getSingleData , addToCart , fetchCart , removeProductCart};

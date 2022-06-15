@@ -4,15 +4,16 @@ import {
   Flex,
   Text,
   IconButton,
-
   Stack,
   useColorModeValue,
   useBreakpointValue,
   useDisclosure,
   Icon,
+  Link,
 } from "@chakra-ui/react";
 
-import {BsCart3} from "react-icons/bs"
+import { BsCart3 } from "react-icons/bs"
+import {Link as RouterLink } from "react-router-dom"
 
 import {
   HamburgerIcon,
@@ -67,10 +68,12 @@ const Navbar = () => {
           direction={"row"}
           spacing={6}
         >
-          <Box position='relative' padding='0 0.rem 0 0'>
-            <CartCounter />
-            <Icon as={BsCart3} boxSize="2rem" />
-          </Box>
+          <Link as={RouterLink} to="/cart">
+            <Box position="relative" padding="0 0.rem 0 0">
+              <CartCounter />
+              <Icon as={BsCart3} boxSize="2rem" />
+            </Box>
+          </Link>
           <Profile />
         </Stack>
       </Flex>

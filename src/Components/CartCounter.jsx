@@ -1,9 +1,18 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchCart } from "../Redux/products/action";
 
 const CartCounter = () => {
   const cart = useSelector((store) => store.ecommerceData.cart);
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (cart?.length === 0) {
+      dispatch(fetchCart())
+    }
+  },[cart?.length , dispatch])
     return <Box
         backgroundColor='black'
         textColor='white'
