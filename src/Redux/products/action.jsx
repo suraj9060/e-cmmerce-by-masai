@@ -125,6 +125,12 @@ const fetchCartFailure = (payload) => {
 };
 
 
+const fetchCart = (payload) => (dispatch) => {
+    dispatch(fetchCartRequest())
+    Axios.get("/cart").then((r) => dispatch(fetchCartSucess(r.data))).catch(e=>dispatch(getSingleDataFailure(e.data)));
+
+
+}
 
 
 export { fetchData , getSingleData , addToCart};
