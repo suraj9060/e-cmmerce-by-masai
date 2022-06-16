@@ -3,7 +3,8 @@ import { Box, Heading, Stack, Image, Text , useColorModeValue, Button } from "@c
 import { DeleteIcon } from "@chakra-ui/icons"
 import { useDispatch, useSelector } from 'react-redux'
 import LinesEllipsisLoose from "react-lines-ellipsis/lib/loose";
-import { removeProductCart } from '../Redux/products/action';
+import { addOrder, removeProductCart } from '../Redux/products/action';
+import CheckOUt from '../Components/CheckOut';
 
 const Cart = () => {
   
@@ -14,6 +15,11 @@ const Cart = () => {
     console.log(id)
     dispatch(removeProductCart(id))
   }
+
+  const checkOutHandler = () => {
+   dispatch(addOrder(cart))
+ }
+
 
   return (
     <Box>
@@ -36,23 +42,9 @@ const Cart = () => {
        })
       }
 
-      <Button
-        rounded={"none"}
-        w={"full"}
-        mt={8}
-        size={"lg"}
-        py={"7"}
-        bg={useColorModeValue("gray.900", "gray.50")}
-        color={useColorModeValue("white", "gray.900")}
-        textTransform={"uppercase"}
-        _hover={{
-          transform: "translateY(2px)",
-          boxShadow: "lg",
-        }}
-        // onClick={addToCartHandle}
-      >
-        CHECKOUT
-      </Button>
+     
+       <CheckOUt cart={cart} checkOutHandler={checkOutHandler} />
+    
     </Box>
   );
 }
@@ -64,6 +56,7 @@ function CartItem({id, image, price, description, title, removeProduct }) {
       rounded="lg"
       width={"fit-content"}
       margin="auto"
+      marginBottom={"2rem"}
     >
       <Stack
         direction={{ base: "column", md: "row" }}
@@ -85,7 +78,7 @@ function CartItem({id, image, price, description, title, removeProduct }) {
             left: "50%",
             transform: `translate(-50% , -50%)`,
             backgroundImage: `url(${image})`,
-            filter: "blur(10px)",
+            filter: "blur(15px)",
             zIndex: -1,
           }}
         >

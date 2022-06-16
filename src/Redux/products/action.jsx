@@ -162,11 +162,117 @@ const removeProductCart = (id) => (dispatch) => {
   
     Axios.delete(`/cart/${id}`)
         .then((r) => {
-            console.log(r)
+            // console.log(r)
             dispatch(removeProductCartSuccess(r.data))
         }).then(() => dispatch(fetchCart()))
         .catch(e => dispatch(removeProductCartFailure(e.data)))
 
 }
 
-export { fetchData , getSingleData , addToCart , fetchCart , removeProductCart};
+const addOrderRequest = () => {
+    return {
+        type: types.ADD_ORDER_REQUEST,
+        
+    }
+}
+
+const addOrderSuccess = (payload) => {
+    return {
+        type: types.ADD_ORDER_SUCCESS,
+        payload
+    }
+}
+
+const addOrderFailure = (payload) => {
+    return {
+        type: types.ADD_ORDER_FAILURE,
+        payload
+    }
+}
+
+const addOrder = (payload) => (dispatch) => {
+    dispatch(addOrderRequest())
+    const orderPayLoad = []
+    for (let product of payload) {
+        product && orderPayLoad.push(Axios.post("/orders" , product))
+    }
+
+    Promise.all(orderPayLoad)
+        .then(r => dispatch(addOrderSuccess()))
+        .then(() => dispatch(emptyCart(payload)))
+        .catch(e => dispatch(addOrderFailure()))
+}
+
+const emptyCartRequest = () => {
+    return {
+      type: types.EMPTY_CART_REQUEST,
+    };
+}
+
+const emptyCartSuccess = () => {
+    return {
+        type:types.EMPTY_CART_SUCCESS,
+    }
+}
+
+const emptyCartFailure = () => {
+    return {
+        type : types.EMPTY_CART_FAILURE,
+    }
+}
+
+const emptyCart = (payload) => (dispatch) => {
+    dispatch(emptyCartRequest())
+   
+    const deleteOrders = [];
+    for (let obj of payload){     
+        let temp = dispatch(removeProductCart(obj.id));
+        deleteOrders.push(temp);
+    }
+
+
+    Promise.all(deleteOrders)
+        .then(r => dispatch(emptyCartSuccess()))
+        .catch(e => dispatch(emptyCartFailure()))
+
+}
+
+const fetchOrderRequest = (payload) => {
+    return {
+        type: types.FETCH_ORDER_REQUEST,
+        payload
+    };   
+}
+
+const fetchOrderSuccess = (payload) => {
+  return {
+    type: types.FETCH_ORDER_SUCCESS,
+    payload,
+  };
+};
+
+const fetchOrderFailure = (payload) => {
+  return {
+    type: types.FETCH_ORDER_FAILURE,
+    payload,
+  };
+};
+
+const fetchOrder = (payload) => (dispatch) => {
+    dispatch(fetchOrderRequest())
+
+    Axios.get("/orders")
+        .then(r => dispatch(fetchOrderSuccess(r.data)))
+        .catch(e => dispatch(fetchOrderFailure(e.data)))
+}
+
+export {
+    fetchData,
+    getSingleData,
+    addToCart,
+    fetchCart,
+    removeProductCart,
+    addOrder,
+    emptyCart,
+    fetchOrder,
+};
