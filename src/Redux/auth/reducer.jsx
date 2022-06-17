@@ -2,7 +2,8 @@ import { SIGNIN_REQUEST, SIGNIN_SUCCESS, SIGNIN_FAILURE } from "./action";
 
 const initialState = {
     auth: false,
-    token:""
+    token: "",
+    error:false
 };
 
 const retucer = (state = initialState, action) => {
@@ -12,19 +13,22 @@ const retucer = (state = initialState, action) => {
     case SIGNIN_REQUEST: 
           return {
               auth: false,
-              token:""
+              token: "",
+              error:false
       };
     
     case SIGNIN_SUCCESS: 
           return {
               auth: true,
-              token: payload
+              token: payload,
+              error:false
       };
     
     case SIGNIN_FAILURE: 
           return {
               auth: false,
-              token:""
+              token: "",
+              error:payload
       };
     default:
       return state;

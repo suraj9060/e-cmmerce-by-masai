@@ -1,4 +1,4 @@
-import { Axios } from "axios";
+import  Axios  from "axios";
 
  export const SIGNIN_REQUEST = "SIGNIN_REQUEST";
 export const SIGNIN_SUCCESS = "SIGNIN_SUCCESS";
@@ -10,22 +10,24 @@ const signInRequest = () => {
   };
 };
 
-const signInSuccess = () => {
+const signInSuccess = (payload) => {
   return {
-    type: SIGNIN_SUCCESS,
+      type: SIGNIN_SUCCESS,
+      payload
   };
 };
 
-const signInFailure = () => {
+const signInFailure = (payload) => {
   return {
-    type: SIGNIN_FAILURE,
+      type: SIGNIN_FAILURE,
+      payload
   };
 };
 
 const signIn = (payload) => (dispatch) => {
   dispatch(signInRequest());
 
-  Axios.post("/api/login", payload, { baseURL: "http://reqres.in" })
+  Axios.post("/api/login", payload, { baseURL: "https://reqres.in" })
     .then((r) => dispatch(signInSuccess(r.data)))
     .catch((e) => dispatch(signInFailure(e.data)));
 };
