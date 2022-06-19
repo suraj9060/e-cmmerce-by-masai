@@ -1,6 +1,17 @@
-import { Box, Center, Heading, Image, Stack, Text, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Heading,
+  Image,
+  Stack,
+  Text,
+  useColorModeValue,
+} from "@chakra-ui/react";
 
 export default function ProductSimple({ image, title, price }) {
+   
+   
+
   return (
     <Center py={12}>
       <Box
@@ -56,6 +67,9 @@ export default function ProductSimple({ image, title, price }) {
             <Text textDecoration={"line-through"} color={"gray.600"}>
               ₹ {Math.ceil(Math.random() * 10) * 50}
             </Text>
+            
+              <Text>Add to cart</Text>
+            
           </Stack>
         </Stack>
       </Box>

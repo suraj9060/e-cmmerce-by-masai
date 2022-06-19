@@ -17,6 +17,9 @@ import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import ProductSimple from "../Components/ProductSample";
 
+// import { useParams } from "react-router-dom";
+// import { getSingleData, addToCart } from "../Redux/products/action";
+
 const Products = () => {
   const products = useSelector((store) => store.ecommerceData.products);
   const dispatch = useDispatch();
@@ -30,6 +33,22 @@ const Products = () => {
       dispatch(fetchData(params));
     }
   }, [dispatch, products?.length, searchParams]);
+
+  // add to cart function
+  //  const { id } = useParams();
+  //  const currentProduct = useSelector(
+  //    (store) => store.ecommerceData.currentProduct
+  //  );
+
+  //  useEffect(() => {
+  //    if (id) {
+  //      dispatch(getSingleData(id));
+  //    }
+  //  }, [dispatch, id]);
+
+  //  const addToCartHandle = () => {
+  //    currentProduct && dispatch(addToCart(currentProduct));
+  //  };
 
   return (
     <Box>

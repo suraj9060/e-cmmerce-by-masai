@@ -61,7 +61,7 @@ const Navbar = () => {
             Logo
           </Text>
         </Flex>
-
+      
         <Stack
           flex={{ base: 1, md: 0 }}
           justify={"flex-end"}
